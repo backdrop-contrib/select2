@@ -1,7 +1,6 @@
-name = Select 2
-description = Adds integration with the Select2 Javascript plugin.
-backdrop = 1.x
 type = module
+name = Select 2
+description = Integration with the Select2 Jquery plugin. Replaces select boxes.
+backdrop = 1.x
 package = User interface
 configure = admin/config/user-interface/select2
-dependencies[] = libraries
