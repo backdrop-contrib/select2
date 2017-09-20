@@ -173,16 +173,6 @@ function select2_element_info_alter(&$type) {
 /**
  * Select element process.
  */
-if (!function_exists('taxonomy_get_parents_all')) {
-  function taxonomy_get_parents_all($tid) {
-    return taxonomy_term_load_parents_all($tid);
-  }
-}
-if (!function_exists('taxonomy_get_parents')) {
-  function taxonomy_get_parents($tid) {
-    return taxonomy_term_load_parents($tid);
-  }
-}
 function select2_select_element_process($element, &$form_state) {
   if (isset($element['#options']) && is_array($element['#options'])) {
     foreach ($element['#options'] as $key => $value) {
