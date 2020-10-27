@@ -325,7 +325,8 @@ function select2_process_textfield($element, &$form_state) {
   if (!config_get('select2.settings', 'use_for_ac_elements') ||
       !isset($element['#autocomplete_path']) ||
       !$element['#autocomplete_path'] ||
-      (isset($element['#select_2_processed']) && $element['#select_2_processed'])) {
+      (isset($element['#select_2_processed']) && $element['#select_2_processed']) ||
+      (isset($element['#autocomplete_path']) && $element['#autocomplete_path'] == 'path-autocomplete')) {
 
     // Must check form field for entity field setting.
     if (isset($field_info)
