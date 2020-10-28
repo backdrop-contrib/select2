@@ -316,18 +316,20 @@ function select2_select_element_process($element, &$form_state) {
 }
 
 /**
- * Process textfield.
+ * Process autocomplete textfields.
  */
 function select2_process_textfield($element, &$form_state) {
   if (isset($element['#field_name']) && $element['#field_name']) {
     $field_info = field_info_field($element['#field_name']);
   }
-  if (!config_get('select2.settings', 'use_for_ac_elements') ||
-      !isset($element['#autocomplete_path']) ||
-      !$element['#autocomplete_path'] ||
-      (isset($element['#select_2_processed']) && $element['#select_2_processed']) ||
-      (isset($element['#autocomplete_path']) && $element['#autocomplete_path'] == 'path-autocomplete')) {
+  // Check to see if we should process this field with Select2.
+  $process_autocomplete_fields = config_get('select2.settings', 'use_for_ac_elements');
+  $is_plain_text_field = empty($element['#autocomplete_path']);
+  $already_processed = !empty($element['#select_2_processed']);
+  // Skip link autocomplete fields. See https://github.com/backdrop-contrib/select2/issues/10
+  $link_autocomplete_field = (isset($element['#autocomplete_path']) && $element['#autocomplete_path'] == 'path-autocomplete');
 
+  if (!$process_autocomplete_fields || $is_plain_text_field || $already_processed || $link_autocomplete_field) {
     // Must check form field for entity field setting.
     if (isset($field_info)
         && (isset($element['#select2'])
