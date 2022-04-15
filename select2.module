@@ -44,7 +44,9 @@ function select2_preprocess_page($vars) {
       $variant = config_get('select2.settings', 'compression_type');
       _select2_post_load_library_callback($library, $library['version'], $variant);
       backdrop_add_library('select2', 'select2');
-      backdrop_add_library('select2', 'backdrop.select2');
+      $path = backdrop_get_path('module', 'select2');
+      backdrop_add_js($path . '/js/Backdrop.select2.js');
+      backdrop_add_css($path . '/css/select2-integration.css');
     }
   }
 }
@@ -91,16 +93,6 @@ function select2_library_info() {
     ),
     'css' => array(
       $path . '/lib/select2.css' => array(),
-    ),
-  );
-  $library['backdrop.select2'] = array(
-    'title' => 'Select2 integration',
-    'version' => '1.x-1.0',
-    'js' => array(
-      $path . '/js/Backdrop.select2.js' => array('weight' => 1000),
-    ),
-    'css' => array(
-      $path . '/css/select2-integration.css'
     ),
   );
 
@@ -869,7 +861,6 @@ function _select2_post_load_library_callback(&$library, $version, $variant) {
         return;
     }
   }
-
   $branch_version = substr($library['version'], 0, 1);
 
   backdrop_add_js(backdrop_get_path('module', 'select2') . '/js/Backdrop.select2.js', array(
@@ -904,7 +895,7 @@ function _select2_post_load_library_callback(&$library, $version, $variant) {
       ),
       'default_settings' => _select2_default_settings(),
       'process_all_selects_on_page' => $process_all_selects,
-      'no_version_check' => config_get('select2.settings', 'disable_jq_version_check') ? TRUE : FALSE,
+      'no_version_check' => TRUE,
       'elements' => array(),
     ),
   );
