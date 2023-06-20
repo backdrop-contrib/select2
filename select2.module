@@ -8,6 +8,17 @@ define('SELECT2_VALUES_SEPARATOR', '¶');
 define('SELECT2_COMMA_REPLACEMENT', '{;}');
 
 /**
+ * Implements hook_config_info().
+ */
+function select2_config_info(
+  $prefixes['select2.settings'] = array(
+    'label' => t('Select2'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+)
+
+/**
  * Implements hook_menu().
  */
 function select2_menu() {
