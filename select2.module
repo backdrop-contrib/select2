@@ -98,12 +98,12 @@ function select2_library_info() {
   $library['select2'] = array(
     'title' => 'Select2',
     'website' => 'https://github.com/select2/select2',
-    'version' => '3.5.4',
+    'version' => '4.0.13',
     'js' => array(
-      $path . '/lib/select2' . $min . '.js' => array(),
+      $path . '/lib/js/select2.full' . $min . '.js' => array(),
     ),
     'css' => array(
-      $path . '/lib/select2.css' => array(),
+      $path . '/lib/css/select2.css' => array(),
     ),
   );
 

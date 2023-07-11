@@ -7,9 +7,9 @@
 /**
  * The Select2 plugin URI.
  */
-define('SELECT2_DOWNLOAD_URI_PREFIX', 'https://github.com/ivaynberg/select2/archive/');
+define('SELECT2_DOWNLOAD_URI_PREFIX', 'https://github.com/select2/select2');
 define('SELECT2_DOWNLOAD_PREFIX', 'select2-');
-define('SELECT2_DEFAULT_TAG', '3.5.4');
+define('SELECT2_DEFAULT_TAG', '4.0.13');
 
 /**
  * Implements hook_drush_command().
