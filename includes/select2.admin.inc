@@ -5,7 +5,7 @@
  */
 
 /**
- * Impelemnts hook_form().
+ * Implements hook_form().
  */
 function select2_settings_form($form, &$form_state) {
   $config = config('select2.settings');
@@ -19,7 +19,7 @@ function select2_settings_form($form, &$form_state) {
     '#title' => 'Loading rules',
   );
 
-  $form['setting_vtabs']['loading_rules']['select2_compression_type'] = array(
+  $form['setting_vtabs']['loading_rules']['compression_type'] = array(
     '#type' => 'radios',
     '#title' => t('Compression level'),
     '#options' => array(
@@ -29,7 +29,7 @@ function select2_settings_form($form, &$form_state) {
     '#default_value' => $config->get('compression_type', 'minified'),
   );
 
-  $form['setting_vtabs']['loading_rules']['select2_update_settings_by_ajax'] = array(
+  $form['setting_vtabs']['loading_rules']['update_settings_by_ajax'] = array(
     '#title' => t('Update settings by Ajax'),
     '#description' => t('This option can be used when the cache is enabled for pages.
 <b>After enabling/disabling your current cache will be cleared</b>.'),
@@ -37,13 +37,13 @@ function select2_settings_form($form, &$form_state) {
     '#default_value' => $config->get('update_settings_by_ajax', FALSE),
   );
 
-  $form['setting_vtabs']['loading_rules']['select2_use_for_all_select_elements'] = array(
+  $form['setting_vtabs']['loading_rules']['use_for_all_select_elements'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use for all &lt;select&gt; elements on the front end'),
     '#default_value' => $config->get('use_for_all_select_elements', FALSE),
   );
 
-  $form['setting_vtabs']['loading_rules']['select2_use_for_all_select_elements_for_admin_pages'] = array(
+  $form['setting_vtabs']['loading_rules']['use_for_all_select_elements_for_admin_pages'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use for all &lt;select&gt; elements on admin pages'),
     '#default_value' => $config->get('use_for_all_select_elements_for_admin_pages', FALSE),
@@ -54,7 +54,7 @@ function select2_settings_form($form, &$form_state) {
     ),
   );
 
-  $form['setting_vtabs']['loading_rules']['select2_use_for_ac_elements'] = array(
+  $form['setting_vtabs']['loading_rules']['use_for_ac_elements'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use Select2 for elements with autocomplete (e.g. Tags)'),
     '#default_value' => $config->get('use_for_ac_elements', FALSE),
@@ -68,7 +68,7 @@ function select2_settings_form($form, &$form_state) {
     '#description' => t('Exclude the following from using the Select2 plugin:'),
   );
 
-  $form['setting_vtabs']['excluded_elements']['select2_excluded_paths'] = array(
+  $form['setting_vtabs']['excluded_elements']['excluded_paths'] = array(
     '#type' => 'textarea',
     '#title' => t('Paths'),
     '#default_value' => $config->get('excluded_paths', ''),
@@ -76,7 +76,7 @@ function select2_settings_form($form, &$form_state) {
 Enter one path per line. The <em>*</em> character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.', array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 
-  $form['setting_vtabs']['excluded_elements']['select2_excluded_ids'] = array(
+  $form['setting_vtabs']['excluded_elements']['excluded_ids'] = array(
     '#type' => 'textarea',
     '#title' => t("IDs"),
     '#default_value' => $config->get('excluded_ids', ''),
@@ -92,7 +92,7 @@ Enter one path per line. The <em>*</em> character is a wildcard. Example paths a
     ),
   );
 
-  $form['setting_vtabs']['excluded_elements']['select2_excluded_classes'] = array(
+  $form['setting_vtabs']['excluded_elements']['excluded_classes'] = array(
     '#type' => 'textarea',
     '#title' => t('Classes'),
     '#default_value' => $config->get('excluded_classes', ''),
@@ -105,7 +105,7 @@ Enter one path per line. The <em>*</em> character is a wildcard. Example paths a
     ),
   );
 
-  $form['setting_vtabs']['excluded_elements']['select2_excluded_selectors'] = array(
+  $form['setting_vtabs']['excluded_elements']['excluded_selectors'] = array(
     '#type' => 'textarea',
     '#title' => t('Selectors'),
     '#default_value' => $config->get('excluded_selectors', ''),
@@ -125,14 +125,14 @@ Enter one path per line. The <em>*</em> character is a wildcard. Example paths a
     '#collapsed' => 1,
   );
 
-  $form['setting_vtabs']['default_settings']['select2_min_options_count_for_search'] = array(
+  $form['setting_vtabs']['default_settings']['min_options_count_for_search'] = array(
     '#type' => 'number',
     '#min' => 0,
     '#title' => t('Minimum number of options to enable Select2'),
     '#default_value' => $config->get('min_options_count_for_search', 15),
   );
 
-  $form['setting_vtabs']['default_settings']['select2_default_width'] = array(
+  $form['setting_vtabs']['default_settings']['default_width'] = array(
     '#type' => 'select',
     '#title' => t('Default <em>width</em> property value'),
     '#default_value' => $config->get('default_width', 'element'),
@@ -153,7 +153,6 @@ Enter one path per line. The <em>*</em> character is a wildcard. Example paths a
 </ul>'),
   );
 
-//$form = system_settings_form($form);
   $form['actions']['#type'] = 'actions';
   $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Save configuration'));
 
@@ -176,20 +175,20 @@ function select2_settings_form_submit($form, &$form_state) {
   $config = config('select2.settings');
   $values = $form_state['values'];
   $config
-    ->set('compression_type', $values['select2_compression_type'])
-    ->set('update_settings_by_ajax', (bool) $values['select2_update_settings_by_ajax'])
-    ->set('use_for_ac_elements', (bool) $values['select2_use_for_ac_elements'])
-    ->set('use_for_all_select_elements', (bool) $values['select2_use_for_all_select_elements'])
-    ->set('use_for_all_select_elements_for_admin_pages', (bool) $values['select2_use_for_all_select_elements_for_admin_pages'])
-    ->set('excluded_ids', $values['select2_excluded_ids'])
-    ->set('excluded_classes', $values['select2_excluded_classes'])
-    ->set('excluded_paths', $values['select2_excluded_paths'])
-    ->set('excluded_selectors', $values['select2_excluded_selectors'])
-    ->set('default_width', $values['select2_default_width'])
-    ->set('min_options_count_for_search', (int) $values['select2_min_options_count_for_search'])
+    ->set('compression_type', $values['compression_type'])
+    ->set('update_settings_by_ajax', (bool) $values['update_settings_by_ajax'])
+    ->set('use_for_ac_elements', (bool) $values['use_for_ac_elements'])
+    ->set('use_for_all_select_elements', (bool) $values['use_for_all_select_elements'])
+    ->set('use_for_all_select_elements_for_admin_pages', (bool) $values['use_for_all_select_elements_for_admin_pages'])
+    ->set('excluded_ids', $values['excluded_ids'])
+    ->set('excluded_classes', $values['excluded_classes'])
+    ->set('excluded_paths', $values['excluded_paths'])
+    ->set('excluded_selectors', $values['excluded_selectors'])
+    ->set('default_width', $values['default_width'])
+    ->set('min_options_count_for_search', (int) $values['min_options_count_for_search'])
     ->save();
 
-  if ($form['setting_vtabs']['loading_rules']['select2_update_settings_by_ajax']['#default_value'] != $form_state['values']['select2_update_settings_by_ajax']) {
+  if ($form['setting_vtabs']['loading_rules']['update_settings_by_ajax']['#default_value'] != $form_state['values']['update_settings_by_ajax']) {
     backdrop_flush_all_caches();
     backdrop_set_message(t('Caches cleared.'));
   }

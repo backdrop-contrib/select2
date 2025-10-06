@@ -8,6 +8,17 @@ define('SELECT2_VALUES_SEPARATOR', '¶');
 define('SELECT2_COMMA_REPLACEMENT', '{;}');
 
 /**
+ * Implements hook_config_info().
+ */
+function select2_config_info() {
+  $prefixes['select2.settings'] = array(
+    'label' => t('Select2'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
+
+/**
  * Implements hook_menu().
  */
 function select2_menu() {
@@ -904,7 +915,6 @@ function _select2_post_load_library_callback(&$library, $version, $variant) {
       ),
       'default_settings' => _select2_default_settings(),
       'process_all_selects_on_page' => $process_all_selects,
-      'no_version_check' => config_get('select2.settings', 'disable_jq_version_check') ? TRUE : FALSE,
       'elements' => array(),
     ),
   );
