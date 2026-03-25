@@ -309,22 +309,25 @@
       $(selector, this.context).once('select2-predefined-excludions').addClass('no-select2');
     })
     
-    if (Backdrop.settings.select_2.excludes.by_selectors.length > 0) {
-      for (i = 0; i < Backdrop.settings.select_2.excludes.by_selectors.length; ++i) {
-        $(Backdrop.settings.select_2.excludes.by_selectors[i], this.context)
-        .once('select2-excluded-by-selectors').addClass('no-select2');
+    if (Backdrop.settings.select_2.excludes) {
+      if (Backdrop.settings.select_2.excludes.by_selectors.length > 0) {
+        for (i = 0; i < Backdrop.settings.select_2.excludes.by_selectors.length; ++i) {
+          $(Backdrop.settings.select_2.excludes.by_selectors[i], this.context)
+          .once('select2-excluded-by-selectors').addClass('no-select2');
+        }
+      }
+      
+      if (Backdrop.settings.select_2.excludes.by_class.length > 0) {
+        var byClassSelector = Backdrop.settings.select_2.excludes.by_class.join(', .');
+        byClassSelector = '.' + byClassSelector;
+        try {
+          $(byClassSelector, this.context).once('select2-excluded-by-classes').addClass('no-select2');
+        } catch (e) {
+          throw 'ERROR while setting exlution classes by classes list: ' + e.message;
+        }
       }
     }
     
-    if (Backdrop.settings.select_2.excludes.by_class.length > 0) {
-      var byClassSelector = Backdrop.settings.select_2.excludes.by_class.join(', .');
-      byClassSelector = '.' + byClassSelector;
-      try {
-        $(byClassSelector, this.context).once('select2-excluded-by-classes').addClass('no-select2');
-      } catch (e) {
-        throw 'ERROR while setting exlution classes by classes list: ' + e.message;
-      }
-    }
   }
   
   Backdrop.Select2.prototype.attachSelect2 = function() {
@@ -585,7 +588,12 @@
   Backdrop.Select2.prototype.checkElementForExclusions = function($element) {
     if (!$element.id) return false;
     
+    if (!Backdrop.settings.select_2.excludes) {
+          return false;
+    }    
+    
     var excludeIds = Backdrop.settings.select_2.excludes.by_id.values;
+    
     
     if ($.inArray($element.id, excludeIds) >= 0) {
       return true;
