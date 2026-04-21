@@ -128,8 +128,9 @@ Enter one path per line. The <em>*</em> character is a wildcard. Example paths a
   $form['setting_vtabs']['default_settings']['min_options_count_for_search'] = array(
     '#type' => 'number',
     '#min' => 0,
-    '#title' => t('Minimum number of options to enable Select2'),
+    '#title' => t('Minimum number of options to enable Select2 search bar'),
     '#default_value' => $config->get('min_options_count_for_search', 15),
+    '#description' => t('If a select element has this many options, Select2 will automatically supply a search bar so the user can type to search for an option.'),
   );
 
   $form['setting_vtabs']['default_settings']['default_width'] = array(
