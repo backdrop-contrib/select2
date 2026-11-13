@@ -111,7 +111,7 @@ function select2_library_info() {
       $path . '/js/Backdrop.select2.js' => array('weight' => 1000),
     ),
     'css' => array(
-      $path . '/css/select2-integration.css'
+      $path . '/css/select2-integration.css',
     ),
   );
 
@@ -351,11 +351,7 @@ function select2_process_textfield($element, &$form_state) {
       return $element;
     }
   }
-  $element_id = isset($element['#id']) ?
-                $element['#id'] :
-                (isset($element['#attributes']['id']) ?
-                  $element['#attributes']['id'] :
-                  backdrop_clean_css_identifier($element['#name']));
+  $element_id = isset($element['#id']) ? $element['#id'] : (isset($element['#attributes']['id']) ? $element['#attributes']['id'] : backdrop_clean_css_identifier($element['#name']));
   if ((!isset($element['#field_info']) || !$element['#field_info'])
       && isset($element['#field_name']) && $element['#field_name']) {
     $field_info = field_info_field($element['#field_name']);
@@ -383,7 +379,7 @@ function select2_process_textfield($element, &$form_state) {
   $element['#attributes'] += array(
     'data-select2-ajax'     => 'ac_element_ajax',
     'data-select2-ajaxpath' => url($element['#autocomplete_path']),
-    'data-select2-initSelection' => 'acS2InitSelecttion'
+    'data-select2-initSelection' => 'acS2InitSelecttion',
   );
 
   if (!isset($element['#required']) || !$element['#required']) {
@@ -409,24 +405,24 @@ function select2_process_textfield($element, &$form_state) {
   if (isset($element['#entity_type']) &&
       isset($element['#field_name']) &&
       isset($element['#bundle'])) {
-        if (!isset($element['#field_instance']) || !$element['#field_instance']) {
-          $field_instance = field_info_instance($element['#entity_type'], $element['#field_name'], $element['#bundle']);
+    if (!isset($element['#field_instance']) || !$element['#field_instance']) {
+      $field_instance = field_info_instance($element['#entity_type'], $element['#field_name'], $element['#bundle']);
 
-          $element['#field_instance'] = $field_instance;
-        }
-        else {
-          $field_instance = $element['#field_instance'];
-        }
+      $element['#field_instance'] = $field_instance;
+    }
+    else {
+      $field_instance = $element['#field_instance'];
+    }
 
-        if (strstr($field_instance['widget']['type'], '_tags') !== FALSE) {
-          $s2_ac_defaults['separator'] = ',';
-          $s2_ac_defaults['tokenSeparators'] = array(',');
-          $s2_ac_defaults['initSelection'] = 'taxonomyTermRefAcS2InitSelecttion';
+    if (strstr($field_instance['widget']['type'], '_tags') !== FALSE) {
+      $s2_ac_defaults['separator'] = ',';
+      $s2_ac_defaults['tokenSeparators'] = array(',');
+      $s2_ac_defaults['initSelection'] = 'taxonomyTermRefAcS2InitSelecttion';
 
-          if ($element['#value']) {
-            $s2_ac_defaults['comma_replacement'] = SELECT2_COMMA_REPLACEMENT;
-          }
-        }
+      if ($element['#value']) {
+        $s2_ac_defaults['comma_replacement'] = SELECT2_COMMA_REPLACEMENT;
+      }
+    }
   }
 
   if (isset($field_info) && $field_info['cardinality'] != 1) {
@@ -438,9 +434,7 @@ function select2_process_textfield($element, &$form_state) {
     }
   }
 
-  $result_settings = (isset($element['#select2_defaults'])) ?
-                     array_merge($s2_ac_defaults, $element['#select2'], $element['#select2_defaults']) :
-                     array_merge($s2_ac_defaults, $element['#select2']);
+  $result_settings = (isset($element['#select2_defaults'])) ? array_merge($s2_ac_defaults, $element['#select2'], $element['#select2_defaults']) : array_merge($s2_ac_defaults, $element['#select2']);
 
   $element['#select2'] = $result_settings;
 
@@ -477,6 +471,9 @@ function select2_process_textfield($element, &$form_state) {
 }
 
 
+/**
+ * Alter the entity reference autocomplete base form for Select2 integration.
+ */
 function select2_field_widget_entityreference_autocomplete_base_form_alter(&$element, &$form_state, $context) {
   if (isset($element['target_id'])) {
     $target_element = &$element['target_id'];
@@ -497,14 +494,17 @@ function select2_field_widget_entityreference_autocomplete_base_form_alter(&$ele
       && $field_instance['settings']['select2_integration']) {
 
         $select2_settings = $field_instance['settings']['select2_integration'];
-        if (isset($select2_settings['hide_id']) && $select2_settings['hide_id']) {
-          $target_element['#select2_defaults']['hideEntityIds'] = TRUE;
-        }
+      if (isset($select2_settings['hide_id']) && $select2_settings['hide_id']) {
+        $target_element['#select2_defaults']['hideEntityIds'] = TRUE;
       }
+    }
   }
 }
 
 
+/**
+ * Alter the entity reference autocomplete form for Select2 integration.
+ */
 function select2_field_widget_entityreference_autocomplete_form_alter(&$element, &$form_state, $context) {
   select2_field_widget_entityreference_autocomplete_base_form_alter($element, $form_state, $context);
   $element['target_id']['#select2_defaults']['multiple'] = FALSE;
@@ -512,6 +512,9 @@ function select2_field_widget_entityreference_autocomplete_form_alter(&$element,
 }
 
 
+/**
+ * Alter the entity reference autocomplete tags form for Select2 integration.
+ */
 function select2_field_widget_entityreference_autocomplete_tags_form_alter(&$element, &$form_state, $context) {
   select2_field_widget_entityreference_autocomplete_base_form_alter($element, $form_state, $context);
   $element['#select2_defaults']['initSelection'] = 'entityReferenceInitSelecttion';
@@ -671,6 +674,9 @@ function _select2_form_field_ui_field_options_select_edit_form_alter(&$form, &$f
 }
 
 
+/**
+ * Alter the entity reference autocomplete base form for Select2 integration.
+ */
 function _select2_form_field_ui_field_entityreference_autocomplete_base_edit_form_alter(&$form, &$form_state, $form_id) {
   $field = $form['#field'];
   _select2_form_field_ui_field_base_edit_form_alter($form, $form_state, $form_id);
@@ -779,7 +785,7 @@ function select2_taxonomy_term_reference_validate(&$element, &$form_state) {
       // Trying to add new term. Get max weight of terms in current voc for
       // adding new term at the end of list.
       $max_weight_select = db_select('taxonomy_term_data', 'td')
-      //->condition('vid', $taxonomy_vocabulary->vid);
+      // ->condition('vid', $taxonomy_vocabulary->vid);
         ->condition('vocabulary', $taxonomy_vocabulary->machine_name);
       $max_weight_select->addExpression('MAX(td.weight)');
 
@@ -1011,10 +1017,10 @@ function _select2_default_settings() {
  * Element settings.
  *
  * @param string $element_id
- *   Element id
+ *   Element id.
  *
  * @param array $settings
- *   Settings
+ *   Settings.
  */
 function _select2_set_element_settings($element_id, $settings) {
   $js = &backdrop_static('backdrop_add_js', array());
@@ -1063,6 +1069,9 @@ function _select2_set_element_settings($element_id, $settings) {
   }
 }
 
+/**
+ * Sets the JavaScript settings for Select2.
+ */
 function _select2_set_js_settings($settings) {
   $js = &backdrop_static('backdrop_add_js', array());
 
@@ -1125,7 +1134,7 @@ function _select2_set_js_settings($settings) {
 function _select2_current_path_is_admin() {
   $result = &backdrop_static(__FUNCTION__, NULL);
 
-  if ($result !== NULL){
+  if ($result !== NULL) {
     return $result;
   }
 
@@ -1134,13 +1143,12 @@ function _select2_current_path_is_admin() {
     return $result;
   }
 
-  // AJAX check
+  // AJAX check.
   if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
       && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
       && !empty($_SERVER['HTTP_REFERER'])) {
 
     // Need to check request referrer url for admin path.
-
     $referrer_url = $_SERVER['HTTP_REFERER'];
 
     $site_url_prefix = url(NULL, array('absolute' => TRUE)) . (config_get('system.core', 'clean_url') ? '' : '?q=');

@@ -13,65 +13,65 @@
 
     return this.toString();
   };
-  
+
   String.prototype.quote_trim = function () {
     var trimRegex = new RegExp('^"(.*)?"$', "g"),
         resultString = this;
-    
+
     while (trimRegex.test(resultString)) {
       resultString = this.replace(trimRegex, '$1');
     }
 
     return resultString.toString();
   };
-  
+
   String.prototype.regExpReplace = function (rule, replaceValue, ruleFlags) {
     ruleFlags = ruleFlags || 'g';
     var trimRegex = new RegExp(rule, ruleFlags),
         resultString = this;
-    
+
     resultString = this.replace(trimRegex, replaceValue);
 
     return resultString.toString();
   };
-  
+
   String.prototype.trimDotes = function() {
     return this.extTrim('\\.');
   }
-  
+
   Backdrop.select2functions = Backdrop.select2functions || {};
-  
+
   /**
    * @constructor
    * @this {Backdrop.Select2}
    * @param {DOM} context The context.
    */
   Backdrop.Select2 = function(context) {
-    
+
     /**
      * Current context.
      * @public
      */
     this.context = context;
-    
+
     this.contextSettings = null;
-    
+
     this.Defaults = Backdrop.Select2.Defaults;
-    
+
     this.functionsScopesNames = [
       'Backdrop.Select2.functionsScope',
       'Backdrop.select2functions'
     ];
-    
+
     function setSelect2Defaults () {
       $.extend(true, $.fn.select2.defaults, Backdrop.Select2.Defaults);
       $.extend(true, $.fn.select2.defaults, Backdrop.settings.select_2.default_settings);
     }
-    
+
     setSelect2Defaults();
-    
+
   };
-  
+
   /**
    * Default options for the Select2.
    * @public
@@ -102,7 +102,7 @@
       '.tabledrag-hide select'
     ],
   };
-  
+
   Backdrop.Select2.prototype.attachBehaviors = function(element) {
     $.each(Backdrop.behaviors, function () {
       if ($.isFunction(this.select2attach)) {
@@ -110,16 +110,16 @@
       }
     });
   }
-  
-  Backdrop.Select2.functionsScope = Backdrop.Select2.functionsScope || {}; 
-  
+
+  Backdrop.Select2.functionsScope = Backdrop.Select2.functionsScope || {};
+
   Backdrop.Select2.functionsScope.baseCreateSearchChoice = function (term) {
     return {
-      id: term, 
+      id: term,
       text: term
     };
   };
-  
+
   Backdrop.Select2.functionsScope.formatSelectionTaxonomyTermsItem = function (term) {
 
     if (term.hover_title) {
@@ -128,9 +128,9 @@
 
     return term.text;
   };
-  
+
   Backdrop.Select2.functionsScope.formatSelection_taxonomy_terms_item = Backdrop.Select2.functionsScope.formatSelectionTaxonomyTermsItem;
-  
+
   Backdrop.Select2.functionsScope.formatResultTaxonomyTermsItem = function (term) {
 
     var attributes = '';
@@ -143,21 +143,21 @@
 
     return '<span class="taxonomy_terms_item" ' + attributes + '>' + term.text + ' </span>' + prefix;
   };
-  
+
   Backdrop.Select2.functionsScope.formatResult_taxonomy_terms_item = Backdrop.Select2.functionsScope.formatResultTaxonomyTermsItem;
-  
+
   Backdrop.Select2.functionsScope.acFormatResult = function (result) {
     return result.text;
   };
-  
+
   Backdrop.Select2.functionsScope.ac_format_result = Backdrop.Select2.functionsScope.acFormatResult;
-  
+
   Backdrop.Select2.functionsScope.acFielsFormatSelection = function (item) {
     return item.text;
   };
-  
+
   Backdrop.Select2.functionsScope.ac_fiels_FormatSelection = Backdrop.Select2.functionsScope.acFielsFormatSelection;
-  
+
   Backdrop.Select2.functionsScope.acS2InitSelecttion = function (element, callback) {
     var def_values = $(element).select2('val');
 
@@ -167,7 +167,7 @@
     });
 
   };
-  
+
   Backdrop.Select2.functionsScope.entityReferenceInitSelecttion = function (element, callback) {
     var def_values = $(element).select2('val'),
         select2 = $(element).data('select2'),
@@ -183,11 +183,11 @@
       if (hideIds) {
         label = label.replace(/\([0-9]+\)$/g, '');
       }
-      
+
       if (comaReplacement) {
         label = label.regExpReplace('{' + comaReplacement + '}', ',');
       }
-      
+
       callback({
         id: def_values,
         text: label
@@ -203,11 +203,11 @@
         if (hideIds) {
           label = label.replace(/\([0-9]+\)$/g, '');
         }
-        
+
         if (comaReplacement) {
           label = label.regExpReplace('{' + comaReplacement + '}', ',');
         }
-        
+
         data.push({
           id: def_values[i],
           text: label
@@ -217,9 +217,9 @@
     }
 
   };
-  
+
   Backdrop.Select2.functionsScope.ac_s2_init_selecttion = Backdrop.Select2.functionsScope.acS2InitSelecttion;
-  
+
   Backdrop.Select2.functionsScope.taxonomyTermRefAcS2InitSelecttion = function (element, callback) {
 
     var def_values = $(element).select2('val');
@@ -250,9 +250,9 @@
     }
 
   };
-  
+
   Backdrop.Select2.functionsScope.taxonomy_term_ref_ac_s2_init_selecttion = Backdrop.Select2.functionsScope.taxonomyTermRefAcS2InitSelecttion;
-  
+
   Backdrop.Select2.functionsScope.getAjaxObjectForAcElement = function (options) {
     return {
       url: function (term) {
@@ -291,27 +291,27 @@
       }
     };
   };
-  
+
   Backdrop.Select2.functionsScope.ac_element_get_ajax_object = Backdrop.Select2.functionsScope.getAjaxObjectForAcElement;
-  
+
   Backdrop.Select2.prototype.setContext = function(context, settings) {
     this.context = context;
     this.processElements();
   }
-  
+
   Backdrop.Select2.prototype.processElements = function() {
     this.markExcludedElements();
     this.attachSelect2();
   }
-  
+
   Backdrop.Select2.prototype.markExcludedElements = function() {
-    
+
     if (!this.context) return;
-    
+
     $.each(this.Defaults.predefineExcludions, function(index, selector) {
       $(selector, this.context).once('select2-predefined-excludions').addClass('no-select2');
     })
-    
+
     if (Backdrop.settings.select_2.excludes) {
       if (Backdrop.settings.select_2.excludes.by_selectors.length > 0) {
         for (i = 0; i < Backdrop.settings.select_2.excludes.by_selectors.length; ++i) {
@@ -319,7 +319,7 @@
           .once('select2-excluded-by-selectors').addClass('no-select2');
         }
       }
-      
+
       if (Backdrop.settings.select_2.excludes.by_class.length > 0) {
         var byClassSelector = Backdrop.settings.select_2.excludes.by_class.join(', .');
         byClassSelector = '.' + byClassSelector;
@@ -330,43 +330,43 @@
         }
       }
     }
-    
+
   }
-  
+
   Backdrop.Select2.prototype.attachSelect2 = function() {
-    
+
     if (!this.context) return;
-    
+
     if (Backdrop.settings.select_2.process_all_selects_on_page) {
       $('select', this.context).once('select2-attach').atachSelect2();
     }
-    
+
     $('select.use-select-2, input[type="text"].use-select-2, input[type="hidden"].use-select-2', this.context)
     .once('select2-attach').atachSelect2();
   }
-  
+
   Backdrop.Select2.prototype.attachSelect2ToElement = function($element) {
-    
+
     if ($element.hasClass('no-select2')) return;
-    
+
     var self = this,
         id = $element.attr('id');
-    
+
     $element.id = id;
-    
+
     if (this.checkElementForExclusions($element)) {
       $element.addClass('no-select2');
       return;
     }
-    
+
     var options = Backdrop.settings.select_2.elements[id]
                   ? Backdrop.settings.select_2.elements[id]
                   : {};
-    
+
     options = this.prepareElementOptions(options, $element);
-               
+
     $(document).trigger('select2.alterElementOptions', [$element, options]);
-    
+
     try {
       $element.select2(options);
     } catch (e) {
@@ -375,7 +375,7 @@
         return;
       }
     }
-    
+
     if (options.locked_ids) {
       var settedData = $element.select2('data'),
           needReData = false;
@@ -385,14 +385,14 @@
           needReData = true;
         }
       });
-      
+
       if (needReData) {
         $element.select2('data', settedData);
       }
     }
-    
+
     Backdrop.Select2Processor.attachBehaviors($element);
-    
+
     var select2Container = false;
 
     if (options.events_handlers) {
@@ -403,7 +403,7 @@
         }
       })
     }
-    
+
     if ($element.data('select2') != undefined) {
       if ($element.data('select2').$container != undefined) {
         select2Container = $element.data('select2').$container;
@@ -411,7 +411,7 @@
         select2Container = $element.data('select2').container;
       }
     }
-    
+
     if (select2Container) {
       // need fix select2 container width
       var stylesForFixWidth = ['element', 'copy'],
@@ -421,7 +421,7 @@
         select2Container.width('auto');
       }
     }
-    
+
     if (select2Container && options.jqui_sortable && $.fn.sortable) {
       select2Container.find("ul.select2-choices").sortable({
         containment: 'parent',
@@ -433,31 +433,31 @@
         }
       });
     }
-    
+
   };
-  
+
   Backdrop.Select2.prototype.searchFunctionInScope = function(functionName) {
 
     var self = this,
         func = false;
-    
+
     functionName = functionName.toString().trimDotes();
-    
+
     if (functionName.indexOf('.') > -1) {
       if (func = this.getObjectOrFunctionByName(functionName)) {
         return func;
       }
     }
-    
+
     $.each(this.functionsScopesNames, function (index, scopeName) {
       if (func = self.getObjectOrFunctionByName(scopeName + '.' + functionName)) {
         return false;
       }
     });
-    
+
     return func;
   }
-  
+
   Backdrop.Select2.prototype.getObjectPropertyByName = function (obj, prop) {
 
     if (typeof obj === 'undefined') {
@@ -471,23 +471,23 @@
 
     return obj[prop];
   }
-  
+
   Backdrop.Select2.prototype.getObjectOrFunctionByName = function (name) {
     return this.getObjectPropertyByName(window, name);
   }
-  
+
   Backdrop.Select2.prototype.prepareElementOptions = function(options, $element) {
     var self = this,
         optionsForStringToFunctionConversion = [
-          'data', 'ajax', 'query', 'formatResult', 'formatSelection', 
+          'data', 'ajax', 'query', 'formatResult', 'formatSelection',
           'initSelection', 'createSearchChoice'
         ],
         elementTagName = $element.prop("tagName"),
-        emptyValueOption = $('option[value=""]', $element).length > 0 ? 
-                           $($('option[value=""]', $element).get(0)) : 
+        emptyValueOption = $('option[value=""]', $element).length > 0 ?
+                           $($('option[value=""]', $element).get(0)) :
                            false,
         clearEmptyValueOption = false;
-    
+
     $.each(optionsForStringToFunctionConversion, function (index, propertyName) {
       if (options[propertyName] && typeof options[propertyName] == 'string') {
         var func = self.searchFunctionInScope(options[propertyName]);
@@ -500,17 +500,17 @@
         }
       }
     });
-    
+
     if (options.selectedOnNewLines != undefined && options.selectedOnNewLines) {
       options.containerCssClass += ' one-option-per-line';
     }
-    
+
     if ($element.hasClass('filter-list')) {
       options.allowClear = false;
     }
-    
+
     if (options.allowClear || emptyValueOption) {
-      
+
       if (emptyValueOption) {
         // Checking for empty option exist and set placeholder by its value if
         // placeholder not defined
@@ -530,7 +530,7 @@
         }
       }
     }
-    
+
     if (options.allow_add_onfly) {
       options.createSearchChoice = function (term, data) {
         if ($(data).filter(
@@ -545,7 +545,7 @@
         }
       };
     }
-    
+
     if (options.taxonomy_ref_ac_allowed) {
       options.createSearchChoice = function (term, data) {
         if ($(data).filter(
@@ -560,7 +560,7 @@
         }
       };
     }
-    
+
     if (options.comma_replacement) {
       var cur_val = "" + $element.val();
       cur_val = cur_val.replace(/".*?"/g, function (match) {
@@ -568,7 +568,7 @@
       });
       $element.val(cur_val);
     }
-    
+
     if (elementTagName == 'SELECT') {
       // disabled_options process
       if (options.disabled_options) {
@@ -578,10 +578,10 @@
       }
       options.jqui_sortable = false;
     }
-    
+
     return options;
   }
-  
+
   /**
    * Check element for matching exclusions rules.
    * @public
@@ -590,14 +590,14 @@
    */
   Backdrop.Select2.prototype.checkElementForExclusions = function($element) {
     if (!$element.id) return false;
-    
+
     if (!Backdrop.settings.select_2.excludes) {
           return false;
-    }    
-    
+    }
+
     var excludeIds = Backdrop.settings.select_2.excludes.by_id.values;
-    
-    
+
+
     if ($.inArray($element.id, excludeIds) >= 0) {
       return true;
     } else if (Backdrop.settings.select_2.excludes.by_id.reg_exs.length > 0) {
@@ -610,35 +610,35 @@
         }
       }
     }
-    
+
     return false;
   }
-  
+
   $.fn.atachSelect2 = function () {
     return this.each(function (index) {
       if (!Backdrop.Select2Processor) return;
-      
+
       var $element = $(this);
-      
+
       Backdrop.Select2Processor.attachSelect2ToElement($element);
-      
+
     });
   }
-  
+
   Backdrop.behaviors.select2 = {
     attach: function (context, settings) {
-      
+
       if (typeof ($.fn.select2) == 'undefined') return;
-      
+
       Backdrop.Select2Processor = Backdrop.Select2Processor || new Backdrop.Select2();
-      
+
       if (Backdrop.settings.select_2.settings_updated) {
         Backdrop.Select2Processor.setContext(context);
       }
       else {
-        
+
         Backdrop.settings.select_2.settings_updated = true;
-        
+
         var setting_update_url = Backdrop.settings.basePath + 'select2/ajax/get_settings';
         jqxhr = $.ajax(setting_update_url)
         .done(function (data) {
@@ -658,8 +658,8 @@
           Backdrop.Select2Processor.setContext(context);
         });
       }
-      
+
     }
   };
-  
+
 })(jQuery, window, document);
