@@ -261,6 +261,9 @@
         }
         return Backdrop.settings.basePath + options.autocomplete_path + '/' + Backdrop.encodePath(term);
       },
+      data: function () {
+        return options.autocomplete_token ? { token: options.autocomplete_token } : {};
+      },
       dataType: 'json',
       quietMillis: 100,
       results: function (data) {

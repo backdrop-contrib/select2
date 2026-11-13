@@ -371,6 +371,7 @@ function select2_process_textfield($element, &$form_state) {
   }
   $s2_ac_defaults = array(
     'autocomplete_path'  => $element['#autocomplete_path'],
+    'autocomplete_token' => function_exists('backdrop_get_autocomplete_token') ? backdrop_get_autocomplete_token($element['#autocomplete_path']) : '',
     'minimumInputLength' => 1,
     'formatResult'       => 'acFormatResult',
     'formatSelection'    => 'acFielsFormatSelection',
